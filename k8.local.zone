@@ -1,0 +1,16 @@
+$TTL	86400 ; 24 hours could have been written as 24h or 1d
+; $TTL used for all RRs without explicit TTL value
+$ORIGIN k8.local.
+@  1D  IN  SOA ns1.k8.local. hostmaster.k8.local. (
+			      2018100502 ; serial
+			      3H ; refresh
+			      15 ; retry
+			      1w ; expire
+			      3h ; nxdomain ttl
+			     )
+       IN  NS     ns1.k8.local. ; in the domain
+       IN  MX  10 mail.k8.local. ; external mail provider
+; server host definitions
+ns1    IN  A      172.17.0.2  ;name server definition     
+www    IN  CNAME  ns1.k8.local.  ;web server definition
+mail   IN  A      172.17.0.2
