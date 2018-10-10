@@ -1,0 +1,21 @@
+$TTL	86400 ; 24 hours could have been written as 24h or 1d
+; $TTL used for all RRs without explicit TTL value
+$ORIGIN local.
+@  1D  IN  SOA ns1.local. hostmaster.local. (
+			      2018100601 ; serial
+			      3H ; refresh
+			      15 ; retry
+			      1w ; expire
+			      3h ; nxdomain ttl
+			     )
+
+       IN  NS     ns1.local.      ; in the domain
+       IN  MX  10 mail.local.     ; local mail provider
+
+; server host definitions
+ns1    IN  A      172.17.0.2      ; name server definition for SOA    
+mail   IN  A      172.17.0.2      ; mail server requires an A record
+k8     IN  A      172.16.177.140  ; Kubernetes portal running on 30000/TCP
+www    IN  A      192.168.1.113   ; This is the local en0 interface on the host.  Address will change with each network.  Use script.
+_dashboard._tcp.local.       IN    SRV 0    5      30000   k8.local.
+
