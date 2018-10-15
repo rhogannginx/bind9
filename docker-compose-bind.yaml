@@ -1,0 +1,19 @@
+version: '3'
+services:
+
+# BIND version 9 DNS Server
+  bind-server:
+    build:
+      context: mra-bind-server
+      args:
+        - CONTAINER_ENGINE_ARG=local
+        - USE_NGINX_PLUS_ARG=false
+    image: richardhogan/bind:latest
+    container_name: bind
+    environment:
+      - NETWORK=fabric
+      - PORT=53
+    ports:
+      - "53:10000"
+    volumes:
+      - tmp/bind:/usr/local/tmp
