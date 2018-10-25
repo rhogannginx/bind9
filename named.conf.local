@@ -6,8 +6,14 @@
 // organization
 include "/etc/bind/zones.rfc1918";
 
-zone "k8.local" in {
+zone "local" in {
       type master;
-      file "/etc/bind/k8.local.zone";
+      file "/etc/bind/local.zone";
+      notify no;
+};
+
+zone "0.60.10.10.in-addr.arpa" in {
+      type master;
+      file "/etc/bind/reverse-10-10-60-0.zone";
       notify no;
 };

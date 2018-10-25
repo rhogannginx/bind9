@@ -1,5 +1,15 @@
-FROM sameersbn/bind
-COPY k8.local.zone /etc/bind
+FROM debian:stretch-slim
+
+  RUN apt update 
+  
+  RUN apt install -y bind9 bind9utils
+
+COPY local.zone /etc/bind
+COPY reverse-192-168-1-0.zone /etc/bind
+COPY reverse-10-10-60-0.zone /etc/bind
 COPY named.conf.local /etc/bind
-RUN /usr/sbin/named -c /etc/bind/named.conf -u bind
-EXPOSE 53 10000
+COPY named.conf.options /etc/bind
+
+EXPOSE 53/udp 53/tcp
+
+CMD ["/usr/sbin/named"]

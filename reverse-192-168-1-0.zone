@@ -1,0 +1,14 @@
+; BIND reverse data file for empty rfc1918 zone
+$TTL	86400
+@	IN	SOA	localhost. root.localhost. (
+			2018101501
+			604800
+			86400
+			2419200
+			86400 )
+;
+@	IN	NS	localhost.
+1.1.168.192.in-addr.arpa.	IN	PTR	gw.local.
+109.1.168.192.in-addr.arpa.     IN      PTR     ziggy.local.
+113.1.168.192.in-addr.arpa.	IN	PTR	rhogan.local.
+254.1.168.192.in-addr.arpa.     IN      PTR     printer.local.
