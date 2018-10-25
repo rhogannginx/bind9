@@ -12,4 +12,23 @@
 #                                                                                                                   #
 # 
 
-echo "www    IN  A      " $(facter ipaddress) >> local.zone" 
+MY_IP=$(ifconfig en0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p')
+
+MY_ZONE_FILE="local.zone"
+MY_MSG="   ; This is the local host.  IP will change with each DHCP.  Use update_dns.sh script"
+
+echo "Using "$(pwd)"/"$MY_ZONE_FILE" as the file to update"
+read $CR
+
+sed -i ".bak" '/www/d' $MY_ZONE_FILE
+echo "www    IN  A      " $MY_IP $MY_MSG >> $MY_ZONE_FILE
+
+MY_DNS_CONTAINER_ID=$(docker ps | grep bind | cut -d' ' -f 1)
+MY_DNS_CONTAINER_NAME=$(docker ps | grep bind | rev | cut -d' ' -f 1 | rev)
+
+echo "Using running DNS container named: "$MY_DNS_CONTAINER_NAME", with container ID: "$MY_DNS_CONTAINER_ID 
+
+docker cp $MY_ZONE_FILE $MY_DNS_CONTAINER_ID:/etc/bind
+docker exec $MY_DNS_CONTAINER_ID chown bind:bind /etc/bind/$MY_ZONE_FILE
+docker exec $MY_DNS_CONTAINER_ID service bind9 restart
+docker start $MY_DNS_CONTAINER_ID
